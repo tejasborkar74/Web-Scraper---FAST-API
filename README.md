@@ -14,8 +14,10 @@ Starting Guid
     3. Run a container using the above created image: `docker run -p 8000:8000 <IMAGE_NAME>`
 
 2. Caching Server:
-     -> If you are running server without docker then run a redis server on port mentioned in config.json
-     -> If you are using docker to run server the replace the redis credentials in config.json to your own redis server and create image again.
+     
+     1. If you are running server without docker then run a redis server on port mentioned in config.json
+     2. If you are using docker to run server the replace the redis credentials in config.json to your own redis server and create image again.
+
 NOTE: Even if you don't use redis it will not stop the application because it has fall back mechanism for redis
 
 
