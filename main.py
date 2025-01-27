@@ -9,7 +9,11 @@ app = FastAPI()
 @app.get("/")
 async def root():
     # add instructions to hit /auth to generate user token
-    return {"message": "Welcome to the web scraper app :)"}
+    return {
+        "message": "Welcome to the web scraper app :)", 
+        "First Step": "Generate auth token for authentication | endpoint: /auth",
+        "Endpoints": "single page: /page/{page} || multiple pages: /pages?end_page={endPageNo}&start_page={startPageNo}"
+    }
 
 @app.post("/auth")
 async def generate_user_token(person: Person):

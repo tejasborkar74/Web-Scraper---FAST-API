@@ -5,13 +5,15 @@ from models.product import Product
 from database.local_db import DatabaseHandler
 from notification.notificationService import NotificationService
 from notification.observer import SlackNotifier, EmailNotifier
+from cache.redis import RedisCache
+from config.config_loader import load_config
 import logging
 
 class ScraperService:
     def __init__(self):
-        self.base_url = "https://dentalstall.com/shop/"
+        self.configs = load_config()
         self.products = []
-        self.db_handler = DatabaseHandler()
+        self.db_handler = DatabaseHandler(self.configs)
         logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
         self.logger = logging.getLogger(__name__)
         
@@ -27,6 +29,10 @@ class ScraperService:
 
         self.notification_service.subscribe(slack_notifier)
         self.notification_service.subscribe(email_notifier)
+        
+        # caching 
+        self.redisClient = RedisCache(self.configs, self.logger)
+        self.base_url = self.configs["TARGET_URL"]
     
     def run(self, start_page: int, end_page: int): 
         scraped_pages = 0
@@ -40,12 +46,11 @@ class ScraperService:
                 self.logger.error(f"Error scraping page {page}: {e}")
                 error_pages.append(page)
         
-        self.logger.info(len(self.products))
         
         # save product in db
-        self.db_handler.save_product_data(self.products)
+        self.db_handler.save_product_data(self.products, self.redisClient)
         
-        # TODO: notification system to the recepient 
+        # notify all recepients
         notification_content = {
             "message": "Scraping completed",
             "pages_scraped": scraped_pages,
@@ -80,6 +85,7 @@ class ScraperService:
                         # Extract product title from <img title="...">
                         title_tag = item.find("img", title=True)
                         product_title = title_tag["title"] if title_tag else "N/A"
+                        product_title = product_title.replace(" - Dentalstall India", "")
 
                         # Extract product image URL from <img src="...">
                         product_image = title_tag["src"] if title_tag else "N/A"
@@ -119,7 +125,6 @@ class ScraperService:
 
     def scrape_page(self, page: int):
         url = f"{self.base_url}/page/{page}/"
-        # url = "https://dentalstall.com/shop/page/2"
         headers = {"User-Agent": "Mozilla/5.0"}
         try:
             response = requests.get(url, headers=headers, timeout=10)

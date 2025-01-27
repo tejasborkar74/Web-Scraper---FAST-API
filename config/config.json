@@ -1,0 +1,8 @@
+{
+    "TARGET_URL": "https://dentalstall.com/shop/",
+    "DATABASE_URL": "database/scraped_database.json",
+    "JWT_SECRET_KEY": "mysecretkey",
+    "JWT_ALGORITHM": "HS256",
+    "REDIS_HOST": "localhost",
+    "REDIS_PORT": 6379
+}
