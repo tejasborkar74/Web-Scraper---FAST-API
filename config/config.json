@@ -4,5 +4,7 @@
     "JWT_SECRET_KEY": "mysecretkey",
     "JWT_ALGORITHM": "HS256",
     "REDIS_HOST": "localhost",
-    "REDIS_PORT": 6379
+    "REDIS_PORT": 6379,
+    "SYSTEM_RETRIES": 3,
+    "RETRY_DELAY": 2
 }

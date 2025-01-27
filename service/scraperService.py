@@ -7,7 +7,9 @@ from notification.notificationService import NotificationService
 from notification.observer import SlackNotifier, EmailNotifier
 from cache.redis import RedisCache
 from config.config_loader import load_config
+from fastapi.responses import JSONResponse
 import logging
+import json
 
 class ScraperService:
     def __init__(self):
@@ -63,8 +65,8 @@ class ScraperService:
         return notification_content
     
     def scrape(self, page: int):
-        retries = 3
-        retry_delay = 2
+        retries = self.configs["SYSTEM_RETRIES"]
+        retry_delay = self.configs["RETRY_DELAY"]
         
         for attempt in range(1, retries + 1):
             try: 
@@ -137,3 +139,16 @@ class ScraperService:
             return Exception(f"Request error occurred for page {page}: {req_err}")
         except Exception as e:
             return Exception(f"Unexpected error occurred for page {page}: {e}")
+        
+    def get_database_data(self): 
+        try:
+            # Open and read the .json file
+            with open(self.configs["DATABASE_URL"], "r") as file:
+                data = json.load(file)
+            
+            # Return the data as JSON response
+            return JSONResponse(content=data)
+        except FileNotFoundError:
+            return JSONResponse(status_code=404, content={"message": "File not found"})
+        except json.JSONDecodeError:
+            return JSONResponse(status_code=500, content={"message": "Error decoding JSON file"})

@@ -4,6 +4,7 @@ from auth.authService import AuthService
 from models.person import Person
 from typing import Optional
 
+
 app = FastAPI()
 
 @app.get("/")
@@ -34,3 +35,8 @@ async def scrape_pages(start_page: Optional[int] = Query(1), end_page: int = Que
     scraper_service = ScraperService()
     result_message = scraper_service.run(start_page, end_page)
     return {"message": result_message}
+
+@app.get("/get_data")
+async def get_database_data():
+    scraper_service = ScraperService()
+    return scraper_service.get_database_data()

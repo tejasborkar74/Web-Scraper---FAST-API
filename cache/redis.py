@@ -26,7 +26,7 @@ class RedisCache:
     def get_product(self, key: str) -> Union[dict, None]:
         if not self.client:
             return None 
-        """Retrieve product data from Redis by key."""
+        # Retrieve product data from Redis by key
         try:
             product_data = self.client.get(key)
             if product_data:
@@ -39,7 +39,7 @@ class RedisCache:
 
     def set_product(self, key: str, product: Product):
         if not self.client:
-            return None  # Redis is down, return None
+            return None
 
         try:
             self.client.set(key, json.dumps(product.model_dump()))
