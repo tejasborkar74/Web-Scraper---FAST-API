@@ -3,6 +3,7 @@ Web Scraper Application using FAST API
 Starting Guid
 
 1. How to run the server locally (We have 2 options): 
+
     OPTION 1: 
     1. run command : `uvicorn main:app --host 0.0.0.0 --port 8000`
     2. To start the application using above command you have to install all the dependencies locally
