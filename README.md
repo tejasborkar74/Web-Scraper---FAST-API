@@ -1,6 +1,6 @@
 Web Scraper Application using FAST API
 
-Starting Guid
+Starting Guide
 
 1. How to run the server locally (We have 2 options): 
 
@@ -9,7 +9,7 @@ Starting Guid
     2. To start the application using above command you have to install all the dependencies locally
     
     OPTION 2 (Using DOCKER):
-    1. This application is Dockarised, so you can just create an image and run a container of the image
+    1. This application is dockerized, so you can just create an image and run a container of the image
     2. Create Image command: `docker build -t <IMAGE-NAME> .`
     3. Run a container using the above created image: `docker run -p 8000:8000 <IMAGE_NAME>`
 
@@ -30,9 +30,9 @@ Endpoints:
 
 Features:
 1. Authentication
-2. Single and multple page Scraping
-3. Chaching - Fall back machanism of chaching server is down
-4. Retry Machanism
+2. Single and multiple page Scraping
+3. Caching - Fall back mechanism of caching server is down
+4. Retry Mechanism
 5. Notification System (Observer Design Pattern)
-6. Moduler and Easy to scale Applicaiton
+6. Modular and Easy to scale Application
 
